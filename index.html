@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="file">
+    <input type="text" id="orcamento">
+    <input type="text" id="responsavel">
+    <input type="datetime-local" id="data">
+    <button>enviar</button>
+</body>
+</html>
+<script>
+let btn = document.querySelector("button");
+btn.addEventListener("click", salvarrelatorio)
+
+function salvarrelatorio(){
+    let file = document.getElementById("file");
+    let orcamento = document.getElementById("orcamento");
+    let responsavel = document.getElementById("responsavel");
+    let data = document.getElementById("data");
+
+    const formData = new FormData()
+    formData.append('pdfrelatorio', file.files[0])
+    formData.append('orcamento', orcamento.value)
+    formData.append('responsavel', responsavel.value)
+    formData.append('upload_vencimento', data.value)
+
+    let url = 'http://localhost:8000/report/new'
+    let options = {
+        method: 'POST',
+        body: formData,
+    }
+
+    fetch(url, options).then(res => {
+
+    if (res.status == 200) {
+        res.json().then(data => {
+            alert('Post Cadastrado');
+        })
+    } else {
+        res.json().then(data => {
+            alert(data)
+        })
+    }
+    })
+}
+
+</script>
